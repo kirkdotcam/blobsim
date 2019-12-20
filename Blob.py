@@ -4,26 +4,30 @@ class Blob():
 
     resources = {}
 
-    def __init__(self, hunger, diet, **kwargs):
+    def __init__(self, diet, **kwargs):
 
         size_mu = kwargs.get("avg_size",50)
         size_sigma = kwargs.get("size_std", 30)
         food = kwargs.get("food", 1000)
 
-        self.hunger = hunger
+        self.hunger = False
         self.diet = diet
         self.alive = True
         self.size = random.gauss(size_mu,size_sigma)
         self.resources["food"] = food
 
-    def report(self):
+    def print_report(self):
         msg=f"""
-        {self.hunger}
-        {self.diet}
-        {self.alive}
-        {int(self.size)}"""
+        Hunger: {self.hunger}
+        Diet: {self.diet}
+        Alive: {self.alive}
+        Size (Int) {int(self.size)}"""
 
         print(msg)
+    
+    def report(self):
+
+        return self.__dict__
 
     def eat(self, population):
         food = self.resources["food"]
@@ -40,7 +44,10 @@ class Blob():
             # eat another blob
             elif self.diet == "carnivore":
                 tempPop = population.copy()
-                tempPop.remove(self)
+                try:
+                    tempPop.remove(self)
+                except:
+                    pass
                 victim = self
                 while len(population) > 1 and victim.alive == False:
                     victim = random.choice(tempPop)
@@ -50,8 +57,6 @@ class Blob():
                     self.size += 0.1*victim.size
                     self.hunger = False
                     victim.alive = False
-                    print("eaten")
-                    victim.report()
 
             # starve
             else:
@@ -64,8 +69,6 @@ class Blob():
         # death by starvation
         if self.size < 20:
             self.alive = False
-            print("starved to death")
-            self.report()
 
         return food
 
@@ -80,7 +83,7 @@ def gen_blob(**kwargs):
 
     diet = kwargs.get("diet",random.choice(["herbivore", "carnivore"]))
 
-    return Blob(False,diet, **kwargs)
+    return Blob(diet, **kwargs)
 
 def gen_population(num=200, **kwargs):
     return [gen_blob(**kwargs) for i in range (num)]
