@@ -1,14 +1,15 @@
 import Blob as b
 
-food = 100
 
-population = [b.gen_blob() for x in range(20)]
+population = b.gen_population(200)
 
-for x in range(100):
+for x in range(1000):
     for blob in population:
         # print(population)
-        food = blob.eat(food,population)
+        blob.survive(population)
         
 
 for blob in population:
-    blob.report()
+    if blob.alive:
+        blob.report()
+print(len(population))

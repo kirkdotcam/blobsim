@@ -1,25 +1,29 @@
 import random
 
 class Blob():
-    def __init__(self, hunger, diet, alive):
+
+    resources = {}
+
+    def __init__(self, hunger, diet, alive, food):
         self.hunger = hunger
         self.diet = diet
         self.alive = alive
         self.size = random.gauss(50,30)
+        self.resources["food"] = food
 
     def report(self):
-        if self.alive:
-            msg=f"""
-            {self.hunger}
-            {self.diet}
-            {self.alive}
-            {self.size}"""
+        msg=f"""
+        {self.hunger}
+        {self.diet}
+        {self.alive}
+        {int(self.size)}"""
 
-            print(msg)
+        print(msg)
 
-    def eat(self, food, population):
+    def eat(self, population):
+        food = self.resources["food"]
         # dead blobs don't eat
-        if not self.alive: return
+        if not self.alive: return food
 
         if self.hunger:
             # eat food
@@ -30,15 +34,19 @@ class Blob():
 
             # eat another blob
             elif self.diet == "carnivore":
+                tempPop = population.copy()
+                tempPop.remove(self)
                 victim = self
-
-                while len(population) > 1 and victim == self:
-                    victim = random.choice(population)
+                while len(population) > 1 and victim.alive == False:
+                    victim = random.choice(tempPop)
+                    tempPop.remove(victim)
                 
                 if victim != self: # need in case there is only 1 pop
                     self.size += 0.1*victim.size
                     self.hunger = False
-                    population.remove(victim)
+                    victim.alive = False
+                    print("eaten")
+                    victim.report()
 
             # starve
             else:
@@ -48,20 +56,27 @@ class Blob():
             self.size -= 1
             self.hunger = True
 
-        return food
-
-    def survive(self, food, population):
-        food = self.eat(food, population)
-
+        # death by starvation
         if self.size < 20:
             self.alive = False
+            print("starved to death")
+            self.report()
 
         return food
+
+    def survive(self, population):
+        self.resources["food"] = self.eat(population)
+
+        return self.resources["food"]
     
                 
 
-def gen_blob():
+def gen_blob(food):
 
     diet = random.choice(["herbivore", "carnivore"])
 
-    return Blob(False,diet,True)
+    return Blob(False,diet,True,food)
+
+def gen_population(num, **kwargs):
+    food=kwargs.get("food",1000)
+    return [gen_blob(food) for i in range (num)]
