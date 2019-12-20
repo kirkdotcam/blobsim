@@ -4,11 +4,16 @@ class Blob():
 
     resources = {}
 
-    def __init__(self, hunger, diet, alive, food):
+    def __init__(self, hunger, diet, **kwargs):
+
+        size_mu = kwargs.get("avg_size",50)
+        size_sigma = kwargs.get("size_std", 30)
+        food = kwargs.get("food", 1000)
+
         self.hunger = hunger
         self.diet = diet
-        self.alive = alive
-        self.size = random.gauss(50,30)
+        self.alive = True
+        self.size = random.gauss(size_mu,size_sigma)
         self.resources["food"] = food
 
     def report(self):
@@ -71,12 +76,11 @@ class Blob():
     
                 
 
-def gen_blob(food):
+def gen_blob(**kwargs):
 
-    diet = random.choice(["herbivore", "carnivore"])
+    diet = kwargs.get("diet",random.choice(["herbivore", "carnivore"]))
 
-    return Blob(False,diet,True,food)
+    return Blob(False,diet, **kwargs)
 
-def gen_population(num, **kwargs):
-    food=kwargs.get("food",1000)
-    return [gen_blob(food) for i in range (num)]
+def gen_population(num=200, **kwargs):
+    return [gen_blob(**kwargs) for i in range (num)]
