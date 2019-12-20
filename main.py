@@ -7,8 +7,6 @@ for x in range(10):
     for blob in population:
         # print(population)
         blob.survive(population)
-        
-
 for blob in population:
     if blob.alive:
         print(blob.report())
