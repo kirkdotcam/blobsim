@@ -1,4 +1,4 @@
-import Blob as b
+from src import Blob as b
 
 
 population = b.gen_population(200, food=20000)
