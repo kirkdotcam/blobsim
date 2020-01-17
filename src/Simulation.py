@@ -14,7 +14,11 @@ class Simulation():
         yield self.pop_survival(days)
 
     def run(self, **kwargs):
-        return list(self.irun(**kwargs))
+        results = []
+        for x in range(days):
+            results.append(next(self.irun(days=days)))
+            
+        return results
 
     def pop_survival(self, days):
         print("begin run")
