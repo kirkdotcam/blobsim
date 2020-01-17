@@ -111,39 +111,39 @@ class Blob():
         return self.resources["food"]
 
 
-def gen_blob(**kwargs):
-    """
-        Generates blob objects.
+    def gen_blob(self, **kwargs):
+        """
+            Generates blob objects.
 
-        Args:
-            **kwargs
-                diet(str) - any of "herbivore","carnivore"
-                FUTURE IMPLEMENTATION: "dendrivore","omnivore"
+            Args:
+                **kwargs
+                    diet(str) - any of "herbivore","carnivore"
+                    FUTURE IMPLEMENTATION: "dendrivore","omnivore"
 
-                others: see gen_population() function.
+                    others: see gen_population() function.
 
-        Returns:
-            Blob(object)
-    """
+            Returns:
+                Blob(object)
+        """
 
-    diet = kwargs.get("diet", random.choice(["herbivore", "carnivore"]))
+        diet = kwargs.get("diet", random.choice(["herbivore", "carnivore"]))
 
-    return Blob(diet, **kwargs)
-
-
-def gen_population(members=200, **kwargs):
-    """
-        Generates a population of blobs using the gen_blob function.
-
-        Args:
-            **kwargs
-                avg_size(int or float) - mean for gaussian
-                    distribution of sizes. Defaults to 50.
-                size_std(int or float) - standard deviation for
-                    gaussian distribution of sizes, defaults to 30
-                food(int or float) - Starting amount of food - defaults to 1000
+        return Blob(diet, **kwargs)
 
 
-    """
+    def gen_population(self, members=200, **kwargs):
+        """
+            Generates a population of blobs using the gen_blob function.
 
-    return [gen_blob(**kwargs) for i in range(members)]
+            Args:
+                **kwargs
+                    avg_size(int or float) - mean for gaussian
+                        distribution of sizes. Defaults to 50.
+                    size_std(int or float) - standard deviation for
+                        gaussian distribution of sizes, defaults to 30
+                    food(int or float) - Starting amount of food - defaults to 1000
+
+
+        """
+
+        return [Blob.gen_blob(self,**kwargs) for i in range(members)]

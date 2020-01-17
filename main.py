@@ -1,13 +1,7 @@
-from src import Blob as b
+# from src import Blob as b
+from src import Simulation as Sim
 
+sim = Sim.Simulation()
 
-population = b.gen_population(200, food=20000)
-
-for x in range(10):
-    for blob in population:
-        # print(population)
-        blob.survive(population)
-for blob in population:
-    if blob.alive:
-        print(blob.report())
-print(len(population))
+print(next(sim.irun(days=100)))
+# sim.report()
