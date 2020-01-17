@@ -16,7 +16,7 @@ class Simulation():
     def run(self, **kwargs):
         return list(self.irun(**kwargs))
 
-    def pop_survival(days):
+    def pop_survival(self, days):
         print("begin run")
 
         for day in range(days):
