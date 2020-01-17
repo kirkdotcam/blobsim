@@ -3,5 +3,6 @@ from src import Simulation as Sim
 
 sim = Sim.Simulation()
 
-print(next(sim.irun(days=100)))
-# sim.report()
+print(sim.population[0].__dict__)
+# print(sim.population[0])
+data = sim.run(days=10)
